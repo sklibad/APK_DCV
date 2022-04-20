@@ -4,7 +4,7 @@ from math import *
 
 class Algorithms:
     def __init__(self):
-        self.winding_num = False
+        pass
 
     def getPointAndLinePosition(self, a: QPoint, p1: QPoint, p2: QPoint):
         # Analyze position point and line
@@ -154,11 +154,3 @@ class Algorithms:
                 return -1
             crossings += value
         return crossings % 2
-
-    def isWindingNumber(self):
-        # Get winding number algorithm state
-        return self.winding_num
-
-    def setSource(self):
-        # Change winding number state
-        self.winding_num = not(self.winding_num)

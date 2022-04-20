@@ -27,54 +27,40 @@ class Ui_MainForm(object):
         self.verticalLayout.addWidget(self.pushButton_3)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout.addItem(spacerItem)
-        self.pushButton = QtWidgets.QPushButton(MainForm)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
-        self.pushButton.setSizePolicy(sizePolicy)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.comboBox = QtWidgets.QComboBox(MainForm)
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.verticalLayout.addWidget(self.comboBox)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout.addItem(spacerItem1)
-        self.label = QtWidgets.QLabel(MainForm)
-        self.label.setToolTipDuration(-3)
-        self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
-        self.verticalLayout.addItem(spacerItem2)
         self.pushButton_2 = QtWidgets.QPushButton(MainForm)
         self.pushButton_2.setObjectName("pushButton_2")
         self.verticalLayout.addWidget(self.pushButton_2)
         self.horizontalLayout.addLayout(self.verticalLayout)
-
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
+        self.pushButton = QtWidgets.QPushButton(MainForm)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton)
         self.retranslateUi(MainForm)
         self.pushButton_3.clicked.connect(self.insertFile) # type: ignore
-        self.pushButton.clicked.connect(self.switchAlgorithm) # type: ignore
         self.pushButton_2.clicked.connect(self.analyze) # type: ignore
+        self.pushButton.clicked.connect(self.clearClick)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainForm)
 
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
-        MainForm.setWindowTitle(_translate("MainForm", "Widget"))
+        MainForm.setWindowTitle(_translate("MainForm", "Point location problem"))
         self.pushButton_3.setText(_translate("MainForm", "Insert file"))
-        self.pushButton.setText(_translate("MainForm", "Switch algorithm"))
-        self.label.setText(_translate("MainForm", "Winding number"))
+        self.comboBox.setItemText(0, _translate("MainForm", "Winding number"))
+        self.comboBox.setItemText(1, _translate("MainForm", "Ray crossing"))
         self.pushButton_2.setText(_translate("MainForm", "Analyze"))
+        self.pushButton.setText(_translate("MainForm", "Clear"))
 
     def insertFile(self):
         self.canvas.insertFile()
         self.canvas.rescaleData()
-
-    def switchAlgorithm(self):
-        self.algorithms.setSource()
-
-        if self.algorithms.isWindingNumber():
-            # Ray crossing algorithm active
-            self.label.setText("Ray crossing")
-        else:
-            # Winding number algorithm active
-            self.label.setText("Winding number")
 
     def analyze(self):
         q = self.canvas.getPoint()
@@ -82,21 +68,25 @@ class Ui_MainForm(object):
         self.canvas.clearResPol()
         for pol in pols:
             # For each polygon
-            if self.algorithms.isWindingNumber():
+            if self.comboBox.currentIndex() == 0:
                 res = self.algorithms.rayCasting(q, pol)
             else:
                 res = self.algorithms.getPositionPointAndPolygon(q, pol)
             if res == 1:
-                print("inside")
                 # If point is inside polygon
                 self.canvas.setResPol(pol)
                 break
             elif res == -1:
-                print("colinear")
                 # If point is colinear
                 self.canvas.setResPol(pol)
 
         self.canvas.update()
+
+    def clearClick(self):
+        self.canvas.delPolygons()
+        self.canvas.delPoint()
+        self.canvas.delResPol()
+        self.canvas.repaint()
 
 
 if __name__ == "__main__":

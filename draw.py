@@ -80,10 +80,10 @@ class Draw(QWidget):
                 new_y = self.coordinates[i][j][1] - self.extent[1]
 
                 # Resize coordinates to pixels fitting into widget extent
-                x = new_x/(self.extent[2] - self.extent[0])*self.canvas_extent[0] // 1
-                y = self.canvas_extent[1] - new_y/(self.extent[3] - self.extent[1])*self.canvas_extent[1] // 1
+                x = round(new_x/(self.extent[2] - self.extent[0])*self.canvas_extent[0] // 1, 0)
+                y = round(self.canvas_extent[1] - new_y/(self.extent[3] - self.extent[1])*self.canvas_extent[1] // 1, 0)
 
-                p = QPoint(x, y)
+                p = QPoint(int(x), int(y))
                 polygon.append(p)
             self.polygons.append(polygon)
 
@@ -136,3 +136,12 @@ class Draw(QWidget):
     def clearResPol(self):
         # Set result polygon
         self.res_pol = []
+
+    def delPolygons(self):
+        self.polygons = [QPolygon()]
+
+    def delPoint(self):
+        self.q = QPoint()
+
+    def delResPol(self):
+        self.res_pol = [QPolygon()]
