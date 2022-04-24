@@ -196,13 +196,24 @@ class Ui_MainForm(object):
 
         a = Algorithms()
         t, s = a.computeSlope(dt)
-        self.Canvas.setTriangles(t)
+        self.Canvas.setTrianglesSlope(t)
         self.Canvas.setShades(s)
         self.Canvas.repaint()
 
 
     def analyzeExposition(self):
-        pass
+        # Get triangulation
+        dt = self.Canvas.getDT()
+        if len(dt) == 0:
+            self.runDT()
+            dt = self.Canvas.getDT()
+
+        a = Algorithms()
+        t, c = a.computeAscpect(dt)
+        self.Canvas.setTrianglesAspect(t)
+        self.Canvas.setColors(c)
+        self.Canvas.repaint()
+
 
     def exitWindow(self):
         exit(-1)

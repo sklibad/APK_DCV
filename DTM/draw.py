@@ -20,11 +20,18 @@ class Draw (QWidget):
         # Contour lines
         self.cont_lines: List[Edge] = []
 
+        # Triangles for slope
+        self.triangles_slope: List[QPolygonF] = []
+
         # Shades of grey
         self.shades: List[int] = []
 
-        # Triangles by slope
-        self.triangles: List[QPolygonF] = []
+        # Triangles for aspect
+        self.triangles_aspect: List[QPolygonF] = []
+
+        # Aspect colors
+        self.colors: List[QColor] = []
+
 
     def getPoints(self):
         return self.points
@@ -38,11 +45,17 @@ class Draw (QWidget):
     def setCL(self, cont_lines):
         self.cont_lines = cont_lines
 
-    def setTriangles(self, t):
-        self.triangles = t
+    def setTrianglesSlope(self, t):
+        self.triangles_slope = t
+
+    def setTrianglesAspect(self, t):
+        self.triangles_aspect = t
 
     def setShades(self, s):
         self.shades = s
+
+    def setColors(self, c):
+        self.colors = c
 
     def mousePressEvent(self, e: QMouseEvent):
         # Get cursor position
@@ -80,11 +93,17 @@ class Draw (QWidget):
             qp.drawLine(int(e.getStart().x()), int(e.getStart().y()), int(e.getEnd().x()), int(e.getEnd().y()))
             #qp.drawLine(QPointF(e.getStart()), QPointF(e.getEnd()))
 
-        # Draw
+        # Draw slope
         qp.setPen(Qt.GlobalColor.gray)
-        for i in range(len(self.triangles)):
+        for i in range(len(self.triangles_slope)):
             qp.setBrush(QColor(self.shades[i], self.shades[i], self.shades[i]))
-            qp.drawPolygon(self.triangles[i])
+            qp.drawPolygon(self.triangles_slope[i])
+
+        # Draw aspect
+        qp.setPen(Qt.GlobalColor.gray)
+        for i in range(len(self.triangles_aspect)):
+            qp.setBrush(self.colors[i])
+            qp.drawPolygon(self.triangles_aspect[i])
 
         # Draw contour lines
         qp.setPen(Qt.GlobalColor.black)

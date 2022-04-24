@@ -331,11 +331,72 @@ class Algorithms:
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
             t = Triangle(dt[i], dt[i + 1], dt[i + 2])
-            slope = t.calculateSlope()*180/pi
+            n = t.getNormalVector()
+
+            # Angle in degrees between plane of triangle and horizontal plane
+            slope = acos(n[2] / sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2))*180/pi
             slope = 255 - slope/90*255
             shades.append(slope)
+
+            # Get triangle as QPolygonF object
             t_2D = t.getQPolygonF()
             triangles.append(t_2D)
 
         return triangles, shades
+
+    def computeAscpect(self, dt: List[Edge]):
+        # Calculates aspect of each triangle of delaunay triangulation
+
+        triangles: List[Triangle] = []
+        colors: List[QColor] = []
+
+        # Browse list of edge by triangles
+        for i in range(0, len(dt), 3):
+            t = Triangle(dt[i], dt[i + 1], dt[i + 2])
+            n = t.getNormalVector()
+
+            # Partial derivatives
+            fx = n[0]
+            fy = n[1]
+
+            # Get triangle as QPolygonF object
+            t_2D = t.getQPolygonF()
+            triangles.append(t_2D)
+
+            # Azimuth in degrees
+            try:
+                A = atan(fy/fx)*180/pi
+            # If surface is flat
+            except:
+                colors.append(QColor(128, 128, 128))
+                continue
+
+            # Quadrant correction
+            if fx > 0:
+                A = 90 - A
+            elif fx < 0:
+                A = 270 - A
+
+            # Aspect visualization by cardinal direction
+            if 25 < A <= 65:
+                colors.append(QColor(255, 165, 0))
+            elif 65 < A <= 105:
+                colors.append(QColor(255, 255, 0))
+            elif 105 < A <= 145:
+                colors.append(QColor(0, 128, 0))
+            elif 145 < A <= 185:
+                colors.append(QColor(0, 191, 255))
+            elif 185 < A <= 225:
+                colors.append(QColor(0, 0, 255))
+            elif 225 < A <= 265:
+                colors.append(QColor(0, 0, 139))
+            elif 265 < A <= 305:
+                colors.append(QColor(128, 0, 128))
+            elif 305 < A <= 345:
+                colors.append(QColor(138, 43, 226))
+            else:
+                colors.append(QColor(255, 0, 0))
+
+        return triangles, colors
+
 

@@ -17,7 +17,7 @@ class Triangle:
         self.pol_2D = QPolygonF()
         self.exposition: float = 0
 
-    def calculateSlope(self):
+    def getNormalVector(self):
         # Calculates slope of triangle from delauney triangulation
 
         # Triangle coordinates
@@ -45,10 +45,7 @@ class Triangle:
         # Cross product
         n = cross(u, v)
 
-        # Angle between plane of triangle and horizontal plane
-        slope = acos(n[2]/sqrt(n[0]**2 + n[1]**2 + n[2]**2))
-
-        return slope
+        return n
 
     def getQPolygonF(self):
         return self.pol_2D
