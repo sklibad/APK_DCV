@@ -65,21 +65,14 @@ class Ui_MainForm(object):
         er_list = []
         for pol in polygons:
             if self.comboBox.currentIndex() == 0:
-                try:
-                    er = a.minAreaEnclosingRectangle(pol)
-                except:
-                    continue
+                er = a.minAreaEnclosingRectangle(pol)
             elif self.comboBox.currentIndex() == 1:
-                try:
-                    main_dir = a.reduceGains(pol)
-                    er = a.wallAverage(pol, main_dir)
-                except:
-                    continue
+                main_dir = a.reduceGains(pol)
+                er = a.wallAverage(pol, main_dir)
+
             else:
-                try:
-                    er = a.longestEdge(pol)
-                except:
-                    continue
+                er = a.longestEdge(pol)
+
             er_list.append(er)
 
         # Set MAER

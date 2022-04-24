@@ -3,6 +3,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import shapefile
 
+
 class Draw(QWidget):
 
     def __init__(self, *args, **kwargs):
@@ -22,7 +23,6 @@ class Draw(QWidget):
         # Widget extent
         self.canvas_extent = [770, 577 - 5]
 
-
     def insertFile(self):
         # Shapefile path
         path = QFileDialog.getOpenFileName(self)[0]
@@ -36,8 +36,8 @@ class Draw(QWidget):
         # Inicialize extreme values
         min_x = float("inf")
         min_y = float("inf")
-        max_x = float("inf")*(-1)
-        max_y = float("inf")*(-1)
+        max_x = float("inf") * (-1)
+        max_y = float("inf") * (-1)
 
         # For each polygon
         for f in features:
@@ -71,30 +71,29 @@ class Draw(QWidget):
     def rescaleData(self):
         range_x = abs(self.extent[0] - self.extent[2])
         range_y = abs(self.extent[1] - self.extent[3])
-        x_ratio = self.canvas_extent[0]/range_x
-        y_ratio = self.canvas_extent[1]/range_y
+        x_ratio = self.canvas_extent[0] / range_x
+        y_ratio = self.canvas_extent[1] / range_y
 
         # Maintaining aspect ratio
         if x_ratio < y_ratio:
-            self.canvas_extent[1] = x_ratio*range_y
+            self.canvas_extent[1] = x_ratio * range_y
         else:
-            self.canvas_extent[0] = y_ratio*range_x
+            self.canvas_extent[0] = y_ratio * range_x
 
         # For each polygon
         for i in range(len(self.coordinates)):
-            polygon = QPolygon()
+            polygon = QPolygonF()
             # For each coordinate tuple
             for j in range(len(self.coordinates[i])):
-
                 # Change coordinates to positive values
                 new_x = self.coordinates[i][j][0] - self.extent[0]
                 new_y = self.coordinates[i][j][1] - self.extent[1]
 
                 # Resize coordinates to pixels fitting into widget extent
-                x = new_x/(self.extent[2] - self.extent[0])*self.canvas_extent[0] // 1
-                y = self.canvas_extent[1] - new_y/(self.extent[3] - self.extent[1])*self.canvas_extent[1] // 1 + 5
+                x = new_x / (self.extent[2] - self.extent[0]) * self.canvas_extent[0] // 1
+                y = self.canvas_extent[1] - new_y / (self.extent[3] - self.extent[1]) * self.canvas_extent[1] // 1 + 5
 
-                p = QPoint(x, y)
+                p = QPointF(x, y)
                 polygon.append(p)
             self.polygons.append(polygon)
 
@@ -102,26 +101,24 @@ class Draw(QWidget):
         return self.polygons
 
     def delPolygons(self):
-        self.polygons = [QPolygon()]
+        self.polygons = []
 
     def setEnclosingRectangles(self, er: list):
         self.er = er
 
     def delEnclosingRectangles(self):
-        self.er = [QPolygon()]
+        self.er = []
 
     """
     def mousePressEvent(self, e:QMouseEvent):
         # Get cursor position
         x = int(e.position().x())
         y = int(e.position().y())
-    
+
         # Create new point
         p = QPoint(x, y)
-
         # Add to polygon
         self.pol.append(p)
-
         # Repaint screen
         self.repaint()
     """

@@ -1,6 +1,5 @@
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
 from math import *
 
 class Algorithms:
@@ -35,14 +34,14 @@ class Algorithms:
         return gain
 
     def createCH(self, pol:QPolygon):
-        ch = QPolygon()
+        ch = QPolygonF()
 
         #Find pivot
         q = min(pol, key=lambda k: k.y())
 
         # Initialise Pj, Pj1
         pj = q
-        pj1 = QPoint(q.x() - 10, q.y())
+        pj1 = QPointF(q.x() - 10, q.y())
 
         # Appending pivot to convex hull
         ch.append(q)
@@ -100,10 +99,10 @@ class Algorithms:
         y_max = max(pol, key=lambda k: k.y()).y()
 
         # Create vertices of bounding box
-        v1 = QPoint(x_min, y_min)
-        v2 = QPoint(x_max, y_min)
-        v3 = QPoint(x_max, y_max)
-        v4 = QPoint(x_min, y_max)
+        v1 = QPointF(x_min, y_min)
+        v2 = QPointF(x_max, y_min)
+        v3 = QPointF(x_max, y_max)
+        v4 = QPointF(x_min, y_max)
 
         # Area of rectangle
         a = x_max - x_min
@@ -111,7 +110,7 @@ class Algorithms:
         S = a * b
 
         # Create QPolygon
-        minmax_box = QPolygon([v1, v2, v3, v4])
+        minmax_box = QPolygonF([v1, v2, v3, v4])
 
         return S, minmax_box
 
@@ -218,6 +217,9 @@ class Algorithms:
         den_sum = 0
         sigma_dif = self.calculateGain(pol[0], pol[1])
         for i in range(len(pol)):
+            if pol[i].x() == pol[(i+1) % len(pol)].x() and pol[i].y() == pol[(i+1) % len(pol)].y():
+                continue
+
             # Calculate edge length
             s_i = sqrt((pol[i].x() - (pol[(i+1) % len(pol)]).x())**2 + (pol[i].y() - (pol[(i+1) % len(pol)]).y())**2)
 
