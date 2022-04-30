@@ -1,4 +1,3 @@
-from PyQt6.QtCore import *
 from qpoint3D import *
 
 # Triangle edge (oriented)
