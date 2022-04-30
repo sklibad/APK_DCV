@@ -399,4 +399,3 @@ class Algorithms:
 
         return triangles, colors
 
-

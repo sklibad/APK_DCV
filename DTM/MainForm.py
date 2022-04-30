@@ -9,6 +9,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from draw import Draw
 from algorithms import *
 from settings import *
+import sys
 
 class Ui_MainForm(object):
     def setupUi(self, MainForm):
@@ -57,12 +58,12 @@ class Ui_MainForm(object):
         self.actionExit.setObjectName("actionExit")
         self.actionCreate_DT = QtGui.QAction(MainForm)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/triangles2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon2.addPixmap(QtGui.QPixmap("icons/triangles.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionCreate_DT.setIcon(icon2)
         self.actionCreate_DT.setObjectName("actionCreate_DT")
         self.actionCreate_Contour_Lines = QtGui.QAction(MainForm)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/contours2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon3.addPixmap(QtGui.QPixmap("icons/contours.webp"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionCreate_Contour_Lines.setIcon(icon3)
         self.actionCreate_Contour_Lines.setObjectName("actionCreate_Contour_Lines")
         self.actionAnalyze_Slope = QtGui.QAction(MainForm)
@@ -72,7 +73,7 @@ class Ui_MainForm(object):
         self.actionAnalyze_Slope.setObjectName("actionAnalyze_Slope")
         self.actionAnalyze_Exposition = QtGui.QAction(MainForm)
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("icons/orientation2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon5.addPixmap(QtGui.QPixmap("icons/aspect.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionAnalyze_Exposition.setIcon(icon5)
         self.actionAnalyze_Exposition.setObjectName("actionAnalyze_Exposition")
         self.actionAbout = QtGui.QAction(MainForm)
@@ -131,6 +132,10 @@ class Ui_MainForm(object):
 
         # Connect icon and function: exit application window
         self.actionExit.triggered.connect(self.exitWindow)
+
+        # Connect icon and function: exit application window
+        self.actionOpen.triggered.connect(self.openFile)
+
 
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
@@ -200,7 +205,6 @@ class Ui_MainForm(object):
         self.Canvas.setShades(s)
         self.Canvas.repaint()
 
-
     def analyzeExposition(self):
         # Get triangulation
         dt = self.Canvas.getDT()
@@ -214,12 +218,17 @@ class Ui_MainForm(object):
         self.Canvas.setColors(c)
         self.Canvas.repaint()
 
-
     def exitWindow(self):
         exit(-1)
 
+    def openFile(self):
+        try:
+            self.Canvas.insertFile()
+            self.Canvas.rescaleData()
+        except:
+            pass
+
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     MainForm = QtWidgets.QMainWindow()
     ui = Ui_MainForm()
