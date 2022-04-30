@@ -331,15 +331,14 @@ class Algorithms:
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
             t = Triangle(dt[i], dt[i + 1], dt[i + 2])
-            n = t.getNormalVector()
+            n, t_2D = t.getNormalVector()
 
             # Angle in degrees between plane of triangle and horizontal plane
             slope = acos(n[2] / sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2))*180/pi
             slope = 255 - slope/90*255
             shades.append(slope)
 
-            # Get triangle as QPolygonF object
-            t_2D = t.getQPolygonF()
+            # Add triangle to list
             triangles.append(t_2D)
 
         return triangles, shades
@@ -353,14 +352,13 @@ class Algorithms:
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
             t = Triangle(dt[i], dt[i + 1], dt[i + 2])
-            n = t.getNormalVector()
+            n, t_2D = t.getNormalVector()
 
             # Partial derivatives
             fx = n[0]
             fy = n[1]
 
-            # Get triangle as QPolygonF object
-            t_2D = t.getQPolygonF()
+            # Add triangle to list
             triangles.append(t_2D)
 
             # Azimuth in degrees

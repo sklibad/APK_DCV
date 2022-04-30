@@ -14,11 +14,9 @@ class Triangle:
         self.p1 = p1.getStart()
         self.p2 = p2.getStart()
         self.p3 = p3.getStart()
-        self.pol_2D = QPolygonF()
-        self.exposition: float = 0
 
     def getNormalVector(self):
-        # Calculates slope of triangle from delauney triangulation
+        # Calculates normal vector of triangle and creates QPolygonF object
 
         # Triangle coordinates
         x1 = self.p1.x()
@@ -36,7 +34,7 @@ class Triangle:
         z3 = self.p3.getZ()
         p3_2D = QPointF(x3, y3)
 
-        self.pol_2D = QPolygonF([p1_2D, p2_2D, p3_2D])
+        pol_2D = QPolygonF([p1_2D, p2_2D, p3_2D])
 
         # Plane vectors
         u = [x2 - x1, y2 - y1, z2 - z1]
@@ -45,7 +43,4 @@ class Triangle:
         # Cross product
         n = cross(u, v)
 
-        return n
-
-    def getQPolygonF(self):
-        return self.pol_2D
+        return n, pol_2D
