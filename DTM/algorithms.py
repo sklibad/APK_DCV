@@ -93,7 +93,7 @@ class Algorithms:
 
         return c, r
 
-    def getNearestPointIdx(self, p: QPoint3D, points: list[QPoint3D]):
+    def getNearestPointIdx(self, p: QPoint3D, points: List[QPoint3D]):
         # Get index of nearest point
         idx_min = -1
         d_min = inf
@@ -116,7 +116,7 @@ class Algorithms:
 
         return idx_min
 
-    def getDelaunayPointIdx(self, e: Edge, points: list[QPoint3D]):
+    def getDelaunayPointIdx(self, e: Edge, points: List[QPoint3D]):
         # Finding optimal Delaunay point to the edge
         idx_min = -1
         r_min = inf
@@ -219,7 +219,7 @@ class Algorithms:
 
         return dt
 
-    def updateAEL(self, e: Edge, ael: list[Edge]):
+    def updateAEL(self, e: Edge, ael: List[Edge]):
         # Update AEL
         e = e.switch()
 
@@ -331,14 +331,15 @@ class Algorithms:
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
             t = Triangle(dt[i], dt[i + 1], dt[i + 2])
-            n, t_2D = t.getNormalVector()
+            n = t.getNormalVector()
 
             # Angle in degrees between plane of triangle and horizontal plane
             slope = acos(n[2] / sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2))*180/pi
             slope = 255 - slope/90*255
             shades.append(slope)
 
-            # Add triangle to list
+            # Get triangle as QPolygonF object
+            t_2D = t.getQPolygonF()
             triangles.append(t_2D)
 
         return triangles, shades
@@ -352,13 +353,14 @@ class Algorithms:
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
             t = Triangle(dt[i], dt[i + 1], dt[i + 2])
-            n, t_2D = t.getNormalVector()
+            n = t.getNormalVector()
 
             # Partial derivatives
             fx = n[0]
             fy = n[1]
 
-            # Add triangle to list
+            # Get triangle as QPolygonF object
+            t_2D = t.getQPolygonF()
             triangles.append(t_2D)
 
             # Azimuth in degrees
@@ -396,4 +398,5 @@ class Algorithms:
                 colors.append(QColor(255, 0, 0))
 
         return triangles, colors
+
 
