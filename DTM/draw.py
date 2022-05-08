@@ -94,11 +94,12 @@ class Draw (QWidget):
             # Resize coordinates to pixels fitting into widget extent
             x = (new_x / range_x * self.canvas_extent[0]) // 1
             y = (self.canvas_extent[1] - new_y / range_y * self.canvas_extent[1]) // 1
-            #p = QPoint3D(x, y, self.points[i].getZ())
 
             # Extend range of elevation values for better results
-            p = QPoint3D(x, y, self.points[i].getZ()/355*100000)
+            # p = QPoint3D(x, y, self.points[i].getZ())
+            p = QPoint3D(x, y, self.points[i].getZ()/362.09575*10000)
             self.points[i] = p
+
 
     def getPoints(self):
         return self.points
