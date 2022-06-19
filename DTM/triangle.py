@@ -14,6 +14,8 @@ class Triangle:
         self.p1 = p1.getStart()
         self.p2 = p2.getStart()
         self.p3 = p3.getStart()
+        self.qPolygon = QPolygonF()
+        self.col = None
 
     def getNormalVector(self):
         # Calculates normal vector of triangle and creates QPolygonF object
@@ -22,19 +24,17 @@ class Triangle:
         x1 = self.p1.x()
         y1 = self.p1.y()
         z1 = self.p1.getZ()
-        p1_2D = QPointF(x1, y1)
+        self.qPolygon.append(QPointF(x1, y1))
 
         x2 = self.p2.x()
         y2 = self.p2.y()
         z2 = self.p2.getZ()
-        p2_2D = QPointF(x2, y2)
+        self.qPolygon.append(QPointF(x2, y2))
 
         x3 = self.p3.x()
         y3 = self.p3.y()
         z3 = self.p3.getZ()
-        p3_2D = QPointF(x3, y3)
-
-        pol_2D = QPolygonF([p1_2D, p2_2D, p3_2D])
+        self.qPolygon.append(QPointF(x3, y3))
 
         # Plane vectors
         u = [x2 - x1, y2 - y1, z2 - z1]
@@ -43,4 +43,13 @@ class Triangle:
         # Cross product
         n = cross(u, v)
 
-        return n, pol_2D
+        return n
+
+    def setColor(self, col):
+        self.col = col
+
+    def getColor(self):
+        return self.col
+
+    def getQPolygon(self):
+        return self.qPolygon

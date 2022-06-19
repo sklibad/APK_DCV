@@ -74,6 +74,7 @@ class Ui_MainForm(object):
         self.actionAnalyze_Exposition = QtGui.QAction(MainForm)
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap("icons/aspect.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon5.addPixmap(QtGui.QPixmap("icons/aspect.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionAnalyze_Exposition.setIcon(icon5)
         self.actionAnalyze_Exposition.setObjectName("actionAnalyze_Exposition")
         self.actionAbout = QtGui.QAction(MainForm)
@@ -200,9 +201,8 @@ class Ui_MainForm(object):
             dt = self.Canvas.getDT()
 
         a = Algorithms()
-        t, s = a.computeSlope(dt)
-        self.Canvas.setTrianglesSlope(t)
-        self.Canvas.setShades(s)
+        t = a.computeSlope(dt)
+        self.Canvas.setTrianglesRes(t)
         self.Canvas.repaint()
 
     def analyzeExposition(self):
@@ -213,9 +213,8 @@ class Ui_MainForm(object):
             dt = self.Canvas.getDT()
 
         a = Algorithms()
-        t, c = a.computeAscpect(dt)
-        self.Canvas.setTrianglesAspect(t)
-        self.Canvas.setColors(c)
+        t = a.computeAscpect(dt)
+        self.Canvas.setTrianglesRes(t)
         self.Canvas.repaint()
 
     def exitWindow(self):

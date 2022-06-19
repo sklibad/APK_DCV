@@ -93,7 +93,7 @@ class Algorithms:
 
         return c, r
 
-    def getNearestPointIdx(self, p: QPoint3D, points: List[QPoint3D]):
+    def getNearestPointIdx(self, p: QPoint3D, points: list[QPoint3D]):
         # Get index of nearest point
         idx_min = -1
         d_min = inf
@@ -116,7 +116,7 @@ class Algorithms:
 
         return idx_min
 
-    def getDelaunayPointIdx(self, e: Edge, points: List[QPoint3D]):
+    def getDelaunayPointIdx(self, e: Edge, points: list[QPoint3D]):
         # Finding optimal Delaunay point to the edge
         idx_min = -1
         r_min = inf
@@ -219,7 +219,7 @@ class Algorithms:
 
         return dt
 
-    def updateAEL(self, e: Edge, ael: List[Edge]):
+    def updateAEL(self, e: Edge, ael: list[Edge]):
         # Update AEL
         e = e.switch()
 
@@ -326,7 +326,6 @@ class Algorithms:
         # Calculates slope of each triangle of delaunay triangulation
 
         triangles: List[Triangle] = []
-        shades: List[int] = []
 
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
@@ -336,19 +335,18 @@ class Algorithms:
             # Angle in degrees between plane of triangle and horizontal plane
             slope = acos(n[2] / sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2))*180/pi
             slope = 255 - slope/90*255
-            shades.append(slope)
+            shade = QColor(slope, slope, slope)
+            t.setColor(shade)
 
-            # Get triangle as QPolygonF object
-            t_2D = t.getQPolygonF()
-            triangles.append(t_2D)
+            # Add triangle to list
+            triangles.append(t)
 
-        return triangles, shades
+        return triangles
 
     def computeAscpect(self, dt: List[Edge]):
         # Calculates aspect of each triangle of delaunay triangulation
 
         triangles: List[Triangle] = []
-        colors: List[QColor] = []
 
         # Browse list of edge by triangles
         for i in range(0, len(dt), 3):
@@ -359,16 +357,12 @@ class Algorithms:
             fx = n[0]
             fy = n[1]
 
-            # Get triangle as QPolygonF object
-            t_2D = t.getQPolygonF()
-            triangles.append(t_2D)
-
             # Azimuth in degrees
             try:
                 A = atan(fy/fx)*180/pi
             # If surface is flat
             except:
-                colors.append(QColor(128, 128, 128))
+                col = QColor(128, 128, 128)
                 continue
 
             # Quadrant correction
@@ -379,24 +373,27 @@ class Algorithms:
 
             # Aspect visualization by cardinal direction
             if 25 < A <= 65:
-                colors.append(QColor(255, 165, 0))
+                col = QColor(255, 165, 0)
             elif 65 < A <= 105:
-                colors.append(QColor(255, 255, 0))
+                col = QColor(255, 255, 0)
             elif 105 < A <= 145:
-                colors.append(QColor(0, 128, 0))
+                col = QColor(0, 128, 0)
             elif 145 < A <= 185:
-                colors.append(QColor(0, 191, 255))
+                col = QColor(0, 191, 255)
             elif 185 < A <= 225:
-                colors.append(QColor(0, 0, 255))
+                col = QColor(0, 0, 255)
             elif 225 < A <= 265:
-                colors.append(QColor(0, 0, 139))
+                col = QColor(0, 0, 139)
             elif 265 < A <= 305:
-                colors.append(QColor(128, 0, 128))
+                col = QColor(128, 0, 128)
             elif 305 < A <= 345:
-                colors.append(QColor(138, 43, 226))
+                col = QColor(138, 43, 226)
             else:
-                colors.append(QColor(255, 0, 0))
+                col = QColor(255, 0, 0)
 
-        return triangles, colors
+            # Add triangle to list
+            t.setColor(col)
+            triangles.append(t)
 
+        return triangles
 
