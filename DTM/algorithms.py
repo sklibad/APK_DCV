@@ -334,7 +334,7 @@ class Algorithms:
 
             # Angle in degrees between plane of triangle and horizontal plane
             slope = acos(n[2] / sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2))*180/pi
-            slope = 255 - slope/90*255
+            slope = int(255 - slope/90*255)
             shade = QColor(slope, slope, slope)
             t.setColor(shade)
 
